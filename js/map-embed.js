@@ -11,26 +11,21 @@
 
 var strVar="";
 
-// STYLE OVERRIDES
-strVar += "<style>";
+// STYLE OVERRIDES FOR DRUPAL
+strVar += "<style type='text/css'>";
 strVar += "#legendHolder {min-width: 270px;}";
 strVar += ".component--custom_markup > .content {max-width:100%}"; // Drupal container
 strVar += ".component--main_content, .component--single_column_content {padding:0px}"; // Remove padding between text and map in Drupal.
 //strVar += "p {margin: 0 0 2.2rem;}"; // Overrides Drupal 3.4rem bottom
+strVar += "svg {max-width:none;}"; // Fix for embedding material icon map points in Drupal
+strVar += ".visually-hidden {display: none !important;}"; // Hide text in c19 Drupal top nav
 strVar += "<\/style>";
 
 // Omit var strVar=""; here
 strVar += "<!-- Start HTML -->";
 strVar += "";
-strVar += "<style>";
-strVar += "  svg{ max-width:none; } \/* Fix for embedding material icon map points in Drupal *\/";
-strVar += "<\/style>";
-strVar += "";
 strVar += "<!-- FILTERS -->";
-strVar += "<!--";
-strVar += "  Sample indicator:weight hash value: #census=pop>180:25;edu:50;work:50;pov>15;ypov>10;apov>8;spov>4";
-strVar += "  https:\/\/datascape.github.io\/localsite\/#columns=population:31;education:50";
-strVar += "-->";
+strVar += "<div class=\"search-filters-css\" style=\"display:none\">";
 strVar += "<div id=\"headerFixed\" class=\"filterPanel\">";
 strVar += "  <div class=\"headerOffset headerOffsetOne\">&nbsp;<\/div>";
 strVar += "";
@@ -40,10 +35,14 @@ strVar += "";
 strVar += "  <div id=\"activeLayer\" style=\"display: none\"><\/div>";
 strVar += "";
 strVar += " ";
-strVar += "  <div id=\"filterFieldsHolder\" class=\"content contentpadding\" style=\"padding-top:0px\">";
+strVar += "  <div id=\"filterFieldsHolder\" class=\"contentfull noprint\" style=\"margin:0 auto; padding-top:0px; overflow:auto\">";
 strVar += "    <div class=\"filterFields\" style=\"min-height:54px; padding:2px 0 4px 0; float:left\">";
 strVar += "";
-strVar += "      <div style=\"display:none;\" class=\"filterField mock-up suppliers exporter\">";
+strVar += "      <div id=\"showApps\" class=\"local\" style=\"display:none;float:left;\">";
+strVar += "        <i class=\"material-icons\">&#xE5C3;<\/i>";
+strVar += "      <\/div>";
+strVar += "";
+strVar += "      <div style=\"display:none;\" class=\"filterField layerclass mock-up suppliers exporter\">";
 strVar += "        <div id=\"catSearchHolder\">";
 strVar += "          <div class=\"filterLabel\">";
 strVar += "            <div class=\"filterLabelMain\">";
@@ -54,7 +53,7 @@ strVar += "";
 strVar += "";
 strVar += "            <div style=\"position:relative; float:left;\">";
 strVar += "";
-strVar += "                <div style=\"position:absolute; right:5px; top:5px; pointer-events:none;\">";
+strVar += "                <div class=\"select-menu-arrow-holder\">";
 strVar += "                  <i class=\"material-icons\" style=\"font-size:24px;cursor:pointer;\">&#xE409;<\/i>";
 strVar += "                  <i class=\"material-icons\" style=\"font-size:24px;cursor:pointer;display:none;\">&#xE313;<\/i>";
 strVar += "                <\/div>";
@@ -76,6 +75,8 @@ strVar += "";
 strVar += "      <!-- KEYWORD SEARCH -->";
 strVar += "      <div style=\"float:left\">";
 strVar += "        <div class=\"filterField keywordField\">";
+strVar += "          ";
+strVar += "";
 strVar += "          <!-- Search Companies -->";
 strVar += "          <div class=\"filterLabel\">";
 strVar += "              <div class=\"filterLabelMain\">";
@@ -140,7 +141,7 @@ strVar += "      <!-- LOCATION SEARCH - currently inactive - copy script from si
 strVar += "      <div style=\"float:left;\">";
 strVar += "";
 strVar += "";
-strVar += "            <div style=\"overflow: visible;display:none\" class=\"local filterField searchElements mock-up\">";
+strVar += "            <div style=\"overflow:visible; display:none\" class=\"filterField searchElements mock-up earth\">";
 strVar += "                <div class=\"filterLabel\">";
 strVar += "                  <div class=\"filterLabelMain\">";
 strVar += "                    Where";
@@ -182,7 +183,7 @@ strVar += "                    <div class=\"uparrow uparrow-white\" style=\"left
 strVar += "                    <\/div>";
 strVar += "                    -->";
 strVar += "";
-strVar += "                    <div class=\"filterBubble\" style=\"pointer-events: auto;\"><!-- Catch click through -->";
+strVar += "                    <div id=\"\" class=\"filterBubble\" style=\"pointer-events: auto;\"><!-- Catch click through -->";
 strVar += "                        <div class=\"hideAdvanced\" style=\"float:right;cursor:pointer\">&#10005;<\/div>";
 strVar += "";
 strVar += "                        <input id=\"l\" autocomplete=\"off\" style=\"width:100%;max-width:400px;padding-right:27px;margin-bottom:10px\" class=\"filterClick mobileWide textInput si-input\" type=\"text\" value=\"\" onkeyup=\"return SearchEnter(event);\" \/>";
@@ -206,25 +207,90 @@ strVar += "                              ";
 strVar += "                          <\/ul>";
 strVar += "                          <div style=\"overflow:auto; border:1px solid #ccc; padding:20px;\" class=\"geoListHolder height100\">";
 strVar += "                              <div class=\"geoListIntro\">";
+strVar += "";
+strVar += "                                <div class=\"local input-output\" style=\"display:none\">";
+strVar += "                                <select id=\"state_select\" name=\"state\">";
+strVar += "                                   <option value='AL'>Alabama<\/option>";
+strVar += "                                   <option value='AK'>Alaska<\/option>";
+strVar += "                                   <option value='AZ'>Arizona<\/option>";
+strVar += "                                   <option value='AR'>Arkansas<\/option>";
+strVar += "                                   <option value='CA'>California<\/option>";
+strVar += "                                   <option value='CO'>Colorado<\/option>";
+strVar += "                                   <option value='CT'>Connecticut<\/option>";
+strVar += "                                   <option value='DE'>Delaware<\/option>";
+strVar += "                                   <option value='DC'>District of Columbia<\/option>";
+strVar += "                                   <option value='FL'>Florida<\/option>";
+strVar += "                                   <option value='GA' selected>Georgia<\/option>";
+strVar += "                                   <option value='HI'>Hawaii<\/option>";
+strVar += "                                   <option value='ID'>Idaho<\/option>";
+strVar += "                                   <option value='IL'>Illinois<\/option>";
+strVar += "                                   <option value='IN'>Indiana<\/option>";
+strVar += "                                   <option value='IA'>Iowa<\/option>";
+strVar += "                                   <option value='KS'>Kansas<\/option>";
+strVar += "                                   <option value='KY'>Kentucky<\/option>";
+strVar += "                                   <option value='LA'>Louisiana<\/option>";
+strVar += "                                   <option value='ME'>Maine<\/option>";
+strVar += "                                   <option value='MD'>Maryland<\/option>";
+strVar += "                                   <option value='MA'>Massachusetts<\/option>";
+strVar += "                                   <option value='MI'>Michigan<\/option>";
+strVar += "                                   <option value='MN'>Minnesota<\/option>";
+strVar += "                                   <option value='MS'>Mississippi<\/option>";
+strVar += "                                   <option value='MO'>Missouri<\/option>";
+strVar += "                                   <option value='MT'>Montana<\/option>";
+strVar += "                                   <option value='NE'>Nebraska<\/option>";
+strVar += "                                   <option value='NV'>Nevada<\/option>";
+strVar += "                                   <option value='NH'>New Hampshire<\/option>";
+strVar += "                                   <option value='NJ'>New Jersey<\/option>";
+strVar += "                                   <option value='NM'>New Mexico<\/option>";
+strVar += "                                   <option value='NY'>New York<\/option>";
+strVar += "                                   <option value='NC'>North Carolina<\/option>";
+strVar += "                                   <option value='ND'>North Dakota<\/option>";
+strVar += "                                   <option value='OH'>Ohio<\/option>";
+strVar += "                                   <option value='OK'>Oklahoma<\/option>";
+strVar += "                                   <option value='OR'>Oregon<\/option>";
+strVar += "                                   <option value='PA'>Pennsylvania<\/option>";
+strVar += "                                   <option value='RI'>Rhode Island<\/option>";
+strVar += "                                   <option value='SC'>South Carolina<\/option>";
+strVar += "                                   <option value='SD'>South Dakota<\/option>";
+strVar += "                                   <option value='TN'>Tennessee<\/option>";
+strVar += "                                   <option value='TX'>Texas<\/option>";
+strVar += "                                   <option value='UT'>Utah<\/option>";
+strVar += "                                   <option value='VT'>Vermont<\/option>";
+strVar += "                                   <option value='VA'>Virginia<\/option>";
+strVar += "                                   <option value='WA'>Washington<\/option>";
+strVar += "                                   <option value='WV'>West Virginia<\/option>";
+strVar += "                                   <option value='WI'>Wisconsin<\/option>";
+strVar += "                                   <option value='WY'>Wyoming<\/option>";
+strVar += "                                 <\/select>";
+strVar += "                                 <br><br>";
+strVar += "                                 <\/div>";
+strVar += "                                 <div style=\"clear:both\"><\/div>";
+strVar += "";
 strVar += "                                <b>Quick Links<\/b><br>";
 strVar += "                                <ul>";
+strVar += "                                      ";
+strVar += "                                      <li><a onClick=\"goHash({";
+strVar += "                                      'regiontitle':'West+Central+Georgia',";
+strVar += "                                      'geo':'US13045,US13077,US13143,US13145,US13149,US13199,US13223,US13233,US13263,US13285,US01111,US01017', ";
+strVar += "                                      'lat':'33.0362',";
+strVar += "                                      'lon':'-85.0322'";
+strVar += "                                      }); $('.fieldSelector').hide(); return false;\" href=\"#regiontitle=West+Central+Georgia&geo=US13045,US13077,US13143,US13145,US13149,US13199,US13223,US13233,US13263,US13285,US01111,US01017\">West&nbsp;Central&nbsp;Georgia<\/a><\/li>";
+strVar += "                                      <!-- Smaller region: US13077,US13145,US13149,US13199,US13263,US13285 -->";
+strVar += "";
+strVar += "                                      <li><a onClick=\"goHash({";
+strVar += "                                      'regiontitle':'Central+Georgia',";
+strVar += "                                      'geo':'US13023,US13043,US13091,US13109,US13167,US13175,US13209,US13267,US13271,US13279,US13283,US13309,US13315,US13107,US13235', ";
+strVar += "                                      'lat':'33.0362',";
+strVar += "                                      'lon':'-85.0322'";
+strVar += "                                      }); $('.fieldSelector').hide(); return false;\" href=\"#regiontitle=Central+Georgia&geo=US13023,US13043,US13091,US13109,US13167,US13175,US13209,US13267,US13271,US13279,US13283,US13309,US13315,US13107,US13235\">Central&nbsp;Georgia<\/a><\/li>";
+strVar += "";
 strVar += "                                      <li><a onClick=\"goHash({";
 strVar += "                                      'regiontitle':'Southeast+Coastal+Georgia',";
 strVar += "                                      'geo':'US13001,US13005,US13127,US13161,US13229,US13305', ";
-strVar += "                                      'view':'mosaic', ";
-strVar += "                                      'count':'10',";
 strVar += "                                      'lat':'31.1891',";
 strVar += "                                      'lon':'-81.4979'";
-strVar += "                                      }); $('.fieldSelector').hide(); return false;\" href=\"#regiontitle=Southeast+Coastal+Georgia&geo=US13001,US13005,US13127,US13161,US13229,US13305&view=mosaic&count=10&lat=31.1891&lon=-81.4980\">Southeast Coastal Georgia<\/a><\/li> ";
+strVar += "                                      }); $('.fieldSelector').hide(); return false;\" href=\"#regiontitle=Southeast+Coastal+Georgia&geo=US13001,US13005,US13127,US13161,US13229,US13305&lat=31.1891&lon=-81.4980\">Southeast Coastal Georgia<\/a><\/li>";
 strVar += "";
-strVar += "                                      <li><a onClick=\"goHash({";
-strVar += "                                      'regiontitle':'West+Central+Georgia',";
-strVar += "                                      'geo':'US13077,US13145,US13149,US13199,US13263,US13285', ";
-strVar += "                                      'view':'mosaic', ";
-strVar += "                                      'count':'10',";
-strVar += "                                      'lat':'33.0362',";
-strVar += "                                      'lon':'-85.0322'";
-strVar += "                                      }); $('.fieldSelector').hide(); return false;\" href=\"#regiontitle=West+Central+Georgia&geo=US13077,US13145,US13149,US13199,US13263,US13285&view=mosaic&count=10\">West&nbsp;Central&nbsp;Georgia<\/a><\/li>";
 strVar += "                                <\/ul>";
 strVar += "                                Click column headers to sort:<br>";
 strVar += "                              <\/div>";
@@ -375,6 +441,107 @@ strVar += "";
 strVar += "      <\/div><!-- \/searchField -->";
 strVar += "";
 strVar += "    <\/div><!-- \/filterFields -->";
+strVar += "";
+strVar += "";
+strVar += "";
+strVar += "    <!-- Right Links -->";
+strVar += "        <div style=\"float:right; padding-top:10px;\" class=\"hideMobile\">";
+strVar += "          <div class=\"sendfeedback pagebutton\" style=\"float:left;\">";
+strVar += "            <!--";
+strVar += "            <div style=\"float:left\">";
+strVar += "              <i class=\"material-icons\" style=\"font-size:16pt;padding-top:7px\">&#xE2C3;<\/i>";
+strVar += "            <\/div>";
+strVar += "            -->";
+strVar += "            <div style=\"margin:10px 8px 0 6px;white-space: nowrap; float:left\"> ";
+strVar += "            Input";
+strVar += "            <\/div>";
+strVar += "          <\/div>";
+strVar += "          <div class=\"local downloadbutton showDownload pagebutton\" href=\"#\" style=\"float:left; display:none\">";
+strVar += "            <div style=\"float:left\">";
+strVar += "              <i class=\"material-icons\" style=\"font-size:15pt;padding-top:8px\">&#xE2C4;<\/i>";
+strVar += "            <\/div>";
+strVar += "            <div class=\"downloadtext\" style=\"margin:10px 5px 0 3px;white-space: nowrap; float:left\"> ";
+strVar += "            Download";
+strVar += "            <\/div>";
+strVar += "          <\/div>";
+strVar += "";
+strVar += "        <!--";
+strVar += "        <div class=\"local addlisting pagebutton greenButton\" href=\"#\" style=\"float:left; display:none\">";
+strVar += "          ";
+strVar += "          <div class=\"hideMobile\" style=\"margin:10px 5px 0 3px;white-space: nowrap; float:left\"> ";
+strVar += "          Add Listing";
+strVar += "          <\/div>";
+strVar += "          <div class=\"showMobile\" style=\"display:none;\"><i class=\"material-icons\" style=\"font-size:19pt;padding-top:4px\">&#xE145;<\/i><\/div>";
+strVar += "";
+strVar += "        <\/div>";
+strVar += "        <div class=\"local partnertools pagebutton\" href=\"#\" style=\"float:left; display:none\">";
+strVar += "          <div style=\"margin:10px 5px 0 3px;white-space: nowrap; float:left\"> ";
+strVar += "          Partner Tools";
+strVar += "          <\/div>";
+strVar += "        <\/div>";
+strVar += "        -->";
+strVar += "";
+strVar += "        <!-- Down arrow -->";
+strVar += "        <div class=\"local catchClick hideEmbed\" style=\"position:relative;float:left;overflow:visible;\">";
+strVar += "";
+strVar += "          <div class=\"toggleListOptions pagebutton\"><i class=\"material-icons toggleArrow\" style=\"font-weight:900; font-size: 32px; padding:0px; margin:0px\">&#xE5C5;<\/i>";
+strVar += "          <\/div>";
+strVar += "";
+strVar += "          <div class=\"listOptions filterBubble\">";
+strVar += "";
+strVar += "            <div class=\"hideEmbed\" style=\"display:none\">";
+strVar += "";
+strVar += "              <div class=\"reduceHeader menuItem\" style=\"display:none\"><i class=\"material-icons\" style=\"margin-top:-5px;\">&#xE3C4;<\/i>Narrow Header<\/div>";
+strVar += "";
+strVar += "              <!-- Google Icons - search for \"crop\" -->";
+strVar += "              <div class=\"revealImage menuItem\" style=\"display:none\"><i class=\"material-icons\" style=\"margin-top:-5px;\">&#xE3C4;<\/i>Full Header Image<\/div>";
+strVar += "";
+strVar += "              <div class=\"hideInfo hideInfoLink menuItem\"><i class=\"material-icons\" style=\"margin-top:-5px\">&#xE88E;<\/i>Hide Bar<\/div>";
+strVar += "";
+strVar += "              <div class=\"showInfo showInfoLink menuItem\" style=\"display:none\"><i class=\"material-icons\" style=\"margin-top:-10px\">&#xE88E;<\/i>Show Info<\/div>";
+strVar += "";
+strVar += "            <\/div>";
+strVar += "";
+strVar += "            ";
+strVar += "            <div class=\"showImage menuItem\" style=\"display:none\"><i class=\"material-icons\">slideshow<\/i>Slideshow<\/div>";
+strVar += "";
+strVar += "              <div class=\"hideMobile\">";
+strVar += "              <div class=\"local menuItem refreshMap\" style=\"display:none\">";
+strVar += "                <i class=\"material-icons\" style=\"font-weight:900; margin-top:-5px\">&#xE5D5;<\/i> Refresh Map";
+strVar += "              <\/div>";
+strVar += "            <\/div>";
+strVar += "";
+strVar += "            <!--";
+strVar += "            <div class=\"menuItem hideList\" style=\"display:none\">";
+strVar += "              <i class=\"material-icons\" style=\"font-size:28px;margin-top:-5px;\">&#xE5CD;<\/i> Hide List";
+strVar += "            <\/div>";
+strVar += "";
+strVar += "            <div class=\"menuItem showList\">";
+strVar += "              <i class=\"material-icons\" style=\"font-size:28px;margin-top:-5px;\">&#xE8EF;<\/i> Show List";
+strVar += "            <\/div>";
+strVar += "            -->";
+strVar += "";
+strVar += "            <div class=\"menuItem hideMap\" style=\"display:none\">";
+strVar += "              <i class=\"material-icons\" style=\"font-size:28px;margin-top:-5px;\">&#xE55B;<\/i> Hide Map";
+strVar += "            <\/div>";
+strVar += "            <div class=\"menuItem showMap\" style=\"display:none\">";
+strVar += "              <i class=\"material-icons\" style=\"font-size:28px;margin-top:-5px;\">&#xE55B;<\/i> Show Map";
+strVar += "            <\/div>";
+strVar += "";
+strVar += "            <div class=\"menuItem showThumbnails layerContentHide\" style=\"display:none\">";
+strVar += "              <i class=\"material-icons\" style=\"font-size:28px;margin-top:-5px;\">&#xE8F0;<\/i> Modules";
+strVar += "            <\/div>";
+strVar += "";
+strVar += "          <\/div>";
+strVar += "";
+strVar += "        <\/div>";
+strVar += "        <!-- \/Down arrow -->";
+strVar += "";
+strVar += "        <div class=\"showInfo showInfoButton1 pagebutton\" style=\"float: left; padding: 3px 3px 3px 4px; color:#fff; display:none;\"><i class=\"material-icons\" style=\"font-size:28px;\">&#xE88F;<\/i>";
+strVar += "        <\/div>";
+strVar += "      <\/div>";
+strVar += "      <!-- \/Right Links -->";
+strVar += "";
 strVar += "  <\/div>";
 strVar += "    ";
 strVar += "";
@@ -400,7 +567,7 @@ strVar += "";
 strVar += "      <div style=\"clear:both\"><\/div>";
 strVar += "";
 strVar += "";
-strVar += "      <div id=\"catsMobile\" class=\"suppliers\" style=\"display:none; margin:15px 20px 20px 0; float:left\">";
+strVar += "      <div id=\"catsMobile\" class=\"layerclass suppliers\" style=\"display:none; margin:15px 20px 20px 0; float:left\">";
 strVar += "        <div id=\"catListClone\" class=\"showMobileX\" style=\"width:100%\">";
 strVar += "        <\/div>";
 strVar += "      <\/div>";
@@ -468,33 +635,13 @@ strVar += "  <\/div>";
 strVar += "";
 strVar += "  <\/div>";
 strVar += "  <!-- END CATEGORIES -->";
-strVar += "";
-strVar += "";
 strVar += "<\/div>";
-strVar += "<!-- END FILTERS -->";
-strVar += "";
-strVar += "";
-strVar += "";
-strVar += "<aside class=\"Intermodal_Ports\">";
-strVar += "group,lat,lon,value,address,city,state,zip";
-strVar += "Inman Rail Yard,33.795735,-84.439278,NS,1600 Marietta Rd NW,Atlanta,GA,30318";
-strVar += "Savannah Yard,32.069578,-81.142174,CSX,3000 Tremont Ave,Savannah,GA,31405";
-strVar += "James D. Mason ICTF,32.123934,-81.150914,NS,3 North Main St,Garden City,GA,31408";
-strVar += "Fairburn Industry Yard,33.554907,-84.595026,CSX,6700 McLarin Rd,Fairburn,GA,30213";
-strVar += "Whitaker Rail Yard,33.80944,-84.655451,NS,6000 Westside Rd,Austell,GA,30106";
-strVar += "Chatham ICTF,32.125311,-81.151331,CSX,2 Main St,Garden City,GA,31408";
-strVar += "Savannah,32.10035,-81.169963,NS,1 Charlie Gay Drive,Savannah,GA,31408";
-strVar += "Cordele Intermodal Center,31.966779,-83.755101,Heart GA,2902 East 13th Ave.,Cordele,GA,31010";
-strVar += "Port of Savannah Ocean Terminal,32.093702,-81.111692,\"Ro\/Ro, Breakbulk\",55 N Lathrop Ave,Savannah,GA,31415";
-strVar += "Port of Brunswick,31.125887,-81.541194,\"Ro\/Ro, Agri-Bulk\",157 Penniman Cir,Brunswick,GA,31523";
-strVar += "Port of Savannah,32.125,-81.151,Container,2 Main St,Savannah,GA,31407";
-strVar += "Port of Brunswick Mayor's Point Terminal,31.143373,-81.494753,Breakbulk,1100 Bay Street,Brunswick,GA,31520";
-strVar += "Port of Columbus,32.448734,-84.984038,Liquid Bulk,800 Lumpkin Blvd,Columbus,GA,31901";
-strVar += "Port of Bainbridge,30.902867,-84.606259,Liquid\/Dry Bulk,1321 Spring Creek Road,Bainbridge,GA,39817";
-strVar += "<\/aside>";
 strVar += "";
 strVar += "<!-- Matches filterFields and headerFixed height -->";
 strVar += "<div class=\"headerOffset2\" style=\"height:56px\">&nbsp;<\/div>";
+strVar += "<\/div>";
+strVar += "<!-- END FILTERS -->";
+strVar += "";
 strVar += "";
 strVar += "";
 strVar += "<!-- Settings Panel -->";
@@ -635,7 +782,7 @@ strVar += "  -->";
 strVar += "";
 strVar += "  <!--";
 strVar += "  <div><strong>Link<\/strong><\/div>";
-strVar += "  <input type=\"text\" value='https:\/\/data.georgia.org\/site\/' style='line-height:18pt;display:block;width:100%;font-size:12pt;color:#333;background:#fff;border:1px solid #aaa;'><br>";
+strVar += "  <input type=\"text\" value='https:\/\/georgiadata.github.io\/site\/' style='line-height:18pt;display:block;width:100%;font-size:12pt;color:#333;background:#fff;border:1px solid #aaa;'><br>";
 strVar += "  -->";
 strVar += "";
 strVar += "    <!-- Embed Directory -->";
@@ -652,7 +799,7 @@ strVar += "    <div class=\"embedTag\" style=\"display:none\">";
 strVar += "      <div style=\"margin-bottom:4px\"><a href=\"widget.html#aerospace&sitelook=coi\">Get HTML<\/a> - view source<\/div>";
 strVar += "";
 strVar += "";
-strVar += "      <input type=\"text\" value='<script src=\"\/\/data.georgia.org\/site\/js\/embed.js?site=georgia&v=0.1\"><\/script><div id=\"map\"><\/div>' ";
+strVar += "      <input type=\"text\" value='<script src=\"\/\/georgiadata.github.io\/site\/js\/embed.js?site=georgia&v=0.1\"><\/script><div id=\"map\"><\/div>' ";
 strVar += "      style='display:none;line-height:18pt;width:100%;font-size:12pt;color:#333;background:#fff;border:1px solid #aaa;'>";
 strVar += "    <\/div>";
 strVar += "    -->";
@@ -662,7 +809,7 @@ strVar += "";
 strVar += "  <div class=\"user-5\" style=\"display:none\">";
 strVar += "    <hr>Staff only - ";
 strVar += "    <a href=\"\/maps\/leaflet\/providers\/preview\/\" target=\"basemaps\">View Basemaps<\/a> | ";
-strVar += "    <a href=\"\/localsite\/impact\/json\/menu.json\">View JSON<\/a><br>";
+strVar += "    <a href=\"\/community-data\/us\/state\/GA\/ga-layers.json\">View JSON<\/a><br>";
 strVar += "    <div class=\"settingAdminNotes\"><\/div>";
 strVar += "  <\/div>";
 strVar += "";
@@ -671,10 +818,70 @@ strVar += "<!-- End Settings Panel -->";
 strVar += "";
 strVar += "<div style=\"clear:both\"><\/div>";
 strVar += "";
+strVar += "<!-- APP MENU -->";
+strVar += "<!-- From map-filters.js displayBigThumbnails function -->";
+strVar += "<!-- Currently map-filters.js limits loading to localhost -->";
+strVar += "<div class=\"search-filters-css\" style=\"display:none\">";
+strVar += "<div id=\"honeycombPanelHolder\" style=\"display:none;position: relative;\">";
+strVar += "  <div class=\"hideApps\" style=\"position:absolute;right:0;top:0;cursor:pointer;padding:15px 20px 15px 15px;font-size:19px;color:#ccc;z-index:1\">✕<\/div>";
+strVar += "";
+strVar += "  <div style=\"overflow:auto;position:relative\">";
+strVar += "  <a name=\"sections\"><\/a>";
+strVar += "  <div id=\"honeycombPanel\" style=\"display: block;\">";
+strVar += "    ";
+strVar += "    <!--";
+strVar += "    <div style=\"float:left;display:flex;justify-content:left;\">";
+strVar += "      ";
+strVar += "      <\/div>";
+strVar += "    -->";
+strVar += "";
+strVar += "      <div class=\"bigThumbMenu\" style=\"margin:0 auto; \"><\/div>";
+strVar += "";
+strVar += "      <div id=\"honeyMenuHolder\" style=\"display:none\">";
+strVar += "        <div id=\"honeycombMenu\"><\/div>";
+strVar += "      <\/div>";
+strVar += "";
+strVar += "        <br><br>";
+strVar += "     ";
+strVar += "";
+strVar += "  <\/div>";
+strVar += "  <\/div>";
+strVar += "<\/div>";
+strVar += "<\/div>";
+strVar += "<div style=\"clear:both\"><\/div>";
+strVar += "<!-- \/APP MENU -->";
+strVar += "";
+strVar += "";
+strVar += "";
+strVar += "<div id=\"pageLinksHolder\" class=\"content contentpadding\" style=\"display:none; padding-top:0; padding-bottom:0\">";
+strVar += "  <br>";
+strVar += "    ";
+strVar += "    <div style=\"float:right; padding: 12px 0px 10px 0\" class=\"noprint hideMobile\">";
+strVar += "      <a href=\"https:\/\/model.earth\/io\/charts\/\">About Widgets<\/a>";
+strVar += "    <\/div>";
+strVar += "    <!--";
+strVar += "      class=\"mainColumn mainColumn1\" ";
+strVar += "    -->";
+strVar += "     <div id=\"pageLinksInsert\" style=\"displayX:none; float:left; font-size: 15px; padding: 12px 30px 10px 0\">";
+strVar += "          <a onClick=\"go({}); return false;\"  href=\".\/\">Overview<\/a> | ";
+strVar += "          <a onClick=\"goHash({'go':'bioeconomy','show':''}); return false;\" href=\".\/#go=bioeconomy\">Bioeconomy<\/a> | ";
+strVar += "          <span class=\"local\" style=\"display:none\">";
+strVar += "          <a onClick=\"go({'go':'','show':'farmfresh'}); return false;\" href=\".\/#show=farmfresh\">Fresh Produce<\/a> | ";
+strVar += "          <\/span>";
+strVar += "          <a onClick=\"goHash({'go':'manufacturing','show':''}); return false;\" href=\".\/#go=manufacturing\">Manufacturing<\/a> | ";
+strVar += "          <a onClick=\"goHash({'go':'parts','show':''}); return false;\" href=\".\/#go=parts\">Parts Manufacturing<\/a> ";
+strVar += "          <span class=\"local\" style=\"display:none\"> | ";
+strVar += "          <a onClick=\"goHash({'go':'','show':'suppliers'}); return false;\" href=\".\/#show=suppliers\">PPE Suppliers<\/a> | ";
+strVar += "          <\/span>";
+strVar += "          <a style=\"display:none\" onClick=\"goHash({'geomap':'true'}); return false;\" href=\".\/#geomap=US13\">County&nbsp;Map<\/a>";
+strVar += "          <br>";
+strVar += "      <\/div>";
+strVar += "<\/div>";
+strVar += "";
 strVar += "";
 strVar += "<div class=\"displayOnload\" style=\"display:none;position:relative\">";
 strVar += "<div id=\"map1\"><\/div>";
-strVar += "<div id=\"legendHolder\">";
+strVar += "<div id=\"legendHolder\" style=\"\">";
 strVar += "  <div id=\"allLegends\"><\/div>";
 strVar += "<\/div>";
 strVar += "<\/div>";
@@ -710,11 +917,49 @@ strVar += "      -->";
 strVar += "    <\/div>";
 strVar += "  <\/div>";
 strVar += "";
+strVar += "  <!--";
+strVar += "  <div class=\"sideWidget eWidget\">";
+strVar += "    <div class=\"widgetbar\" style=\"padding-left:5px\">";
+strVar += "      <a href=\"..\/start\/dataset\/\"><img src=\"\/localsite\/info\/img\/backarrow.gif\" style=\"width:11.5px;float:left;margin:1px 7px 0 0\"><\/a>";
+strVar += "      AGRICULTURE, FORESTRY, FISHING AND HUNTING";
+strVar += "    <\/div>";
+strVar += "    ";
+strVar += "    <div class=\"topboxes\">";
+strVar += "      <div style=\"position: relative\">";
+strVar += "          <img src=\"\/localsite\/info\/img\/sectors.gif\" style=\"width:100%;max-width:400px;margin-right:80px\" \/>";
+strVar += "          <div style=\"position: absolute; right:0; top:8px; background: rgb(250,250,250); padding-left:6px\">";
+strVar += "            <img src=\"\/localsite\/info\/img\/plus-minus.gif\" class=\"plus-minus\"><br>";
+strVar += "            <img src=\"\/localsite\/info\/img\/plus-minus.gif\" class=\"plus-minus\"><br>";
+strVar += "            <img src=\"\/localsite\/info\/img\/plus-minus.gif\" class=\"plus-minus\"><br>";
+strVar += "            <img src=\"\/localsite\/info\/img\/plus-minus.gif\" class=\"plus-minus\"><br>";
+strVar += "            <img src=\"\/localsite\/info\/img\/plus-minus.gif\" class=\"plus-minus\"><br>";
+strVar += "            <img src=\"\/localsite\/info\/img\/plus-minus.gif\" class=\"plus-minus\"><br>";
+strVar += "            <img src=\"\/localsite\/info\/img\/plus-minus.gif\" class=\"plus-minus\"><br>";
+strVar += "            <img src=\"\/localsite\/info\/img\/plus-minus.gif\" class=\"plus-minus\"><br>";
+strVar += "            <img src=\"\/localsite\/info\/img\/plus-minus.gif\" class=\"plus-minus\"><br>";
+strVar += "            <img src=\"\/localsite\/info\/img\/plus-minus.gif\" class=\"plus-minus\"><br>";
+strVar += "            <img src=\"\/localsite\/info\/img\/plus-minus.gif\" class=\"plus-minus\"><br>";
+strVar += "            <img src=\"\/localsite\/info\/img\/plus-minus.gif\" class=\"plus-minus\"><br>";
+strVar += "            <img src=\"\/localsite\/info\/img\/plus-minus.gif\" class=\"plus-minus\">";
+strVar += "          <\/div>";
+strVar += "      <\/div>";
+strVar += "";
+strVar += "      <div style=\"font-size: 12px; background:#eee; border-bottom:1px solid #ddd; display:inline; padding:0 4px 0 4px\">";
+strVar += "        <a href=\"..\/start\/dataset\/\">Main categories<\/a> | ";
+strVar += "        <a href=\"..\/start\/dataset\/\">Show all 382 sectors<\/a>";
+strVar += "";
+strVar += "        <span style=\"float:right; color:#777\">Balanced &nbsp;<\/span>";
+strVar += "";
+strVar += "      <\/div>";
+strVar += "";
+strVar += "    <\/div>";
+strVar += "  <\/div>";
+strVar += "  -->";
 strVar += "  ";
 strVar += "<\/div>";
 strVar += "<!-- \/INDUSTRIES -->";
 strVar += "";
-strVar += "<div style=\"display:none;margin:20px 10px 20px 17px; min-width:195px; line-height: 1.5em;\" class=\"suppliers\">";
+strVar += "<div style=\"display:none;margin:20px 10px 20px 17px; min-width:195px; line-height: 1.5em;\" class=\"layerclass suppliers\">";
 strVar += "  <div class=\"catList\" id=\"industryCatList\">";
 strVar += "    <div>All Categories<\/div>";
 strVar += "    <div>Air Purifying Machines<\/div>";
@@ -744,180 +989,6 @@ strVar += "";
 strVar += "<div id=\"list_main\" style=\"overflow:auto; background: #fff\">";
 strVar += "";
 strVar += "";
-strVar += "<!-- buttons -->";
-strVar += "<style>";
-strVar += "        .pagebuttonHolder {";
-strVar += "          padding: 4px;";
-strVar += "          padding-top: 6px;";
-strVar += "          padding-bottom: 11px;";
-strVar += "          overflow: auto;";
-strVar += "          background-color:#fff;";
-strVar += "          width:100%;";
-strVar += "        }";
-strVar += "        .pagebutton {";
-strVar += "          background: #cfcfcf;";
-strVar += "          margin-right: 8px;";
-strVar += "          color:#fff;";
-strVar += "          border-radius: 5px;";
-strVar += "          padding: 0px 4px 0 6px;";
-strVar += "          min-height: 34px;";
-strVar += "          vertical-align: middle;";
-strVar += "          cursor: pointer;";
-strVar += "          \/* text-transform: uppercase; *\/";
-strVar += "          font-family: 'Open Sans', 'Helvetica Neue', HelveticaNeue, calibri, arial, sans-serif;";
-strVar += "          font-size: 15.5px;";
-strVar += "          font-weight: 400;";
-strVar += "          line-height: 1;";
-strVar += "        }";
-strVar += "        .pagebutton:hover {";
-strVar += "          background-color:#aaa;";
-strVar += "        }";
-strVar += "        .listOptions {";
-strVar += "          display:none;";
-strVar += "          position:absolute;";
-strVar += "          left:auto;";
-strVar += "          right: 0;";
-strVar += "          top: 44px;";
-strVar += "          width: 164px;";
-strVar += "        }";
-strVar += "      <\/style>";
-strVar += "";
-strVar += "";
-strVar += "      <div style=\"padding-top:0px;padding-bottom:0px\">";
-strVar += "        <div style=\"overflow: visible;\">";
-strVar += "";
-strVar += "          <div class=\"pagebuttonHolder\" style=\"min-height:45px; padding-left:20px\">";
-strVar += "";
-strVar += "            <div class=\"showApps local\" style=\"display:none;float:left;\">";
-strVar += "              <i class=\"material-icons\" style=\"font-size:30px; color:#ccc; padding:5px 0px 4px 0px; cursor:pointer\">&#xE5C3;<\/i>";
-strVar += "            <\/div>";
-strVar += "";
-strVar += "            <h1 class=\"shortTitle\" style=\"displayX:none; margin-bottom:0px; padding:4px 15px 4px 0; white-space: nowrap; float:left; font-size:28px; color:#999; margin-top;\"><\/h1>";
-strVar += "";
-strVar += "            <div id=\"pageLinks\"><\/div>";
-strVar += "";
-strVar += "            <div style=\"float:right;padding-top:6px\">";
-strVar += "              <div class=\"sendfeedback pagebutton\" style=\"float:left;\">";
-strVar += "                <div style=\"margin:10px 5px 0 3px;white-space: nowrap; float:left\"> ";
-strVar += "                Feedback";
-strVar += "                <\/div>";
-strVar += "              <\/div>";
-strVar += "              <div class=\"local downloadbutton showDownload pagebutton\" href=\"#\" style=\"float:left; display:none\">";
-strVar += "                <div style=\"float:left\">";
-strVar += "                  <i class=\"material-icons\" style=\"font-size:19pt;padding-top:4px\">&#xE2C4;<\/i>";
-strVar += "                <\/div>";
-strVar += "                <div class=\"downloadtext\" style=\"margin:10px 5px 0 3px;white-space: nowrap; float:left\"> ";
-strVar += "                Download";
-strVar += "                <\/div>";
-strVar += "            <\/div>";
-strVar += "";
-strVar += "            <!--";
-strVar += "            <div class=\"local addlisting pagebutton greenButton\" href=\"#\" style=\"float:left; display:none\">";
-strVar += "              ";
-strVar += "              <div class=\"hideMobile\" style=\"margin:10px 5px 0 3px;white-space: nowrap; float:left\"> ";
-strVar += "              Add Listing";
-strVar += "              <\/div>";
-strVar += "              <div class=\"showMobile\" style=\"display:none;\"><i class=\"material-icons\" style=\"font-size:19pt;padding-top:4px\">&#xE145;<\/i><\/div>";
-strVar += "";
-strVar += "            <\/div>";
-strVar += "            <div class=\"local partnertools pagebutton\" href=\"#\" style=\"float:left; display:none\">";
-strVar += "              <div style=\"margin:10px 5px 0 3px;white-space: nowrap; float:left\"> ";
-strVar += "              Partner Tools";
-strVar += "              <\/div>";
-strVar += "            <\/div>";
-strVar += "            -->";
-strVar += "";
-strVar += "            <!-- Down arrow -->";
-strVar += "            <div class=\"local catchClick hideEmbed\" style=\"position:relative;float:left;overflow:visible;\">";
-strVar += "";
-strVar += "              <div class=\"toggleListOptions pagebutton\"><i class=\"material-icons toggleArrow\" style=\"font-weight:900; font-size: 32px; padding:0px; margin:0px\">&#xE5C5;<\/i>";
-strVar += "              <\/div>";
-strVar += "";
-strVar += "              <div class=\"listOptions filterBubble\">";
-strVar += "";
-strVar += "                <div class=\"hideEmbed\" style=\"display:none\">";
-strVar += "";
-strVar += "                  <div class=\"reduceHeader menuItem\" style=\"display:none\"><i class=\"material-icons\" style=\"margin-top:-5px;\">&#xE3C4;<\/i>Narrow Header<\/div>";
-strVar += "";
-strVar += "                  <!-- Google Icons - search for \"crop\" -->";
-strVar += "                  <div class=\"revealImage menuItem\" style=\"display:none\"><i class=\"material-icons\" style=\"margin-top:-5px;\">&#xE3C4;<\/i>Full Header Image<\/div>";
-strVar += "";
-strVar += "                  <div class=\"hideInfo hideInfoLink menuItem\"><i class=\"material-icons\" style=\"margin-top:-5px\">&#xE88E;<\/i>Hide Bar<\/div>";
-strVar += "";
-strVar += "                  <div class=\"showInfo showInfoLink menuItem\" style=\"display:none\"><i class=\"material-icons\" style=\"margin-top:-10px\">&#xE88E;<\/i>Show Info<\/div>";
-strVar += "";
-strVar += "                <\/div>";
-strVar += "";
-strVar += "                ";
-strVar += "                <div class=\"showImage menuItem\" style=\"display:none\"><i class=\"material-icons\">slideshow<\/i>Slideshow<\/div>";
-strVar += "";
-strVar += "                  <div class=\"hideMobile\">";
-strVar += "                  <div class=\"local menuItem refreshMap\" style=\"display:none\">";
-strVar += "                    <i class=\"material-icons\" style=\"font-weight:900; margin-top:-5px\">&#xE5D5;<\/i> Refresh Map";
-strVar += "                  <\/div>";
-strVar += "                <\/div>";
-strVar += "";
-strVar += "                <!--";
-strVar += "                <div class=\"menuItem hideList\" style=\"display:none\">";
-strVar += "                  <i class=\"material-icons\" style=\"font-size:28px;margin-top:-5px;\">&#xE5CD;<\/i> Hide List";
-strVar += "                <\/div>";
-strVar += "";
-strVar += "                <div class=\"menuItem showList\">";
-strVar += "                  <i class=\"material-icons\" style=\"font-size:28px;margin-top:-5px;\">&#xE8EF;<\/i> Show List";
-strVar += "                <\/div>";
-strVar += "                -->";
-strVar += "";
-strVar += "                <div class=\"menuItem hideMap\" style=\"display:none\">";
-strVar += "                  <i class=\"material-icons\" style=\"font-size:28px;margin-top:-5px;\">&#xE55B;<\/i> Hide Map";
-strVar += "                <\/div>";
-strVar += "                <div class=\"menuItem showMap\" style=\"display:none\">";
-strVar += "                  <i class=\"material-icons\" style=\"font-size:28px;margin-top:-5px;\">&#xE55B;<\/i> Show Map";
-strVar += "                <\/div>";
-strVar += "";
-strVar += "                <div class=\"menuItem showThumbnails layerContentHide\" style=\"display:none\">";
-strVar += "                  <i class=\"material-icons\" style=\"font-size:28px;margin-top:-5px;\">&#xE8F0;<\/i> Modules";
-strVar += "                <\/div>";
-strVar += "";
-strVar += "              <\/div>";
-strVar += "";
-strVar += "            <\/div>";
-strVar += "";
-strVar += "            <div class=\"showInfo showInfoButton1 pagebutton\" style=\"float: left; padding: 3px 3px 3px 4px; color:#fff; display:none;\"><i class=\"material-icons\" style=\"font-size:28px;\">&#xE88F;<\/i>";
-strVar += "            <\/div>";
-strVar += "          <\/div>";
-strVar += "        <\/div>";
-strVar += "      <\/div>";
-strVar += "";
-strVar += "";
-strVar += "      <\/div><!-- \/content -->";
-strVar += "";
-strVar += "      <div style=\"clear:both; border-bottom: 1px solid #eee;\">";
-strVar += "      <\/div>";
-strVar += "<!-- \/buttons -->";
-strVar += "";
-strVar += "";
-strVar += "<!-- APP MENU -->";
-strVar += "<!-- From map-filters.js displayBigThumbnails function -->";
-strVar += "<!-- Currently map-filters.js limits loading to localhost -->";
-strVar += "<div id=\"honeycombPanelHolder\" style=\"display:none; margin-top:30px; margin-bottom:50px;\">";
-strVar += "  ";
-strVar += "  <!--div id=\"honeycombPanel\"-->";
-strVar += "  <div id=\"honeycombPanel\" style=\"display: block;\">";
-strVar += "    <a name=\"sections\"><\/a>";
-strVar += "    ";
-strVar += "    <div class=\"bigThumbMenu widthColumns\" style=\"margin:0 auto; \"><\/div>";
-strVar += "";
-strVar += "    <div id=\"honeyMenuHolder\" style=\"display:none\">";
-strVar += "      <div id=\"honeycombMenu\"><\/div>";
-strVar += "    <\/div>";
-strVar += "";
-strVar += "      <br><br>";
-strVar += "      ";
-strVar += "  <\/div>";
-strVar += "<\/div>";
-strVar += "<div style=\"clear:both\"><\/div>";
-strVar += "<!-- \/APP MENU -->";
-strVar += "";
 strVar += "";
 strVar += "<section class=\"data-section\" id=\"data\" style=\"overflow:auto\">";
 strVar += "<div class=\"content contentpadding litePanel displayOnload\" style=\"display:none; padding-top:0px; padding-bottom:10px; padding-right:0px\">";
@@ -929,21 +1000,23 @@ strVar += "        ";
 strVar += "        <h1 class=\"listTitle\" style=\"display:none;margin-bottom:12px\"><\/h1>";
 strVar += "        <h2 class=\"listSubtitle\" style=\"display:none\"><\/h2>";
 strVar += "";
-strVar += "        <div style=\"display:none\" class=\"suppliers\">";
+strVar += "        <div style=\"display:none\" class=\"layerclass farmfresh\">";
 strVar += "          ";
 strVar += "";
-strVar += "          <div id=\"legendLingsHolder\" class=\"localonly\" style=\"display:none;margin-bottom: 20px\">";
+strVar += "          <div id=\"legendLingsHolder\" style=\"margin-bottom: 20px\">";
 strVar += "            <div class=\"legendLink\">";
 strVar += "              <div class=\"legendLinkRect\" style=\"background:#1f78b4;\"><\/div>";
-strVar += "              <div style=\"margin-right:16px;float:left\">MANUFACTURERS<\/div>";
+strVar += "              <div style=\"margin-right:16px;float:left\">FARMERS MARKETS<\/div>";
 strVar += "            <\/div>";
+strVar += "            <!--";
 strVar += "            <div class=\"legendLink\">";
 strVar += "              <div class=\"legendLinkRect\" style=\"background:#b2df8a;\"><\/div>";
 strVar += "              <div style=\"margin-right:16px;float:left\">DISTRIBUTORS<\/div>";
 strVar += "            <\/div>";
+strVar += "            -->";
 strVar += "            <div class=\"legendLink\">";
 strVar += "              <div class=\"legendLinkRect\" style=\"background:#a6cee3;\"><\/div>";
-strVar += "              <div style=\"margin-right:16px;float:left\">BOTH<\/div>";
+strVar += "              <div style=\"margin-right:16px;float:left\">ON FARM SALES<\/div>";
 strVar += "            <\/div>";
 strVar += "            <div style=\"clear:both\"><\/div>";
 strVar += "          <\/div>";
@@ -1064,7 +1137,7 @@ strVar += "          <\/div>";
 strVar += "";
 strVar += "        <\/div>";
 strVar += "";
-strVar += "        <div id=\"disclaimerText\" class=\"suppliers\" style=\"display:none;margin-right:20px;font-size: 12px;\">";
+strVar += "        <div id=\"disclaimerText\" class=\"layerclass suppliers\" style=\"display:none;margin-right:20px;font-size: 12px;\">";
 strVar += "          <b>Disclaimer:<\/b>  The Georgia Department of Economic Development (GDEcD) is collecting information from Georgia companies that indicate they are producing essential medical supplies in response to the COVID-19 pandemic. GDEcD is sharing these companies’ information with Georgia’s units of local government and other potential in-state buyers of these essential medical supplies merely as a courtesy. The following product information and addresses were submitted by private companies to GDEcD, and this list does not constitute an endorsement of any particular company or product by the State or by GDEcD.  GDEcD does not make any representations or warranties as to the accuracy of this information, or as to the quality or quantity of the products offered by these companies. Buyers use this information at their own risk.  Buyers are encouraged to contact the companies directly, for product specifications, delivery options, and other information required for executing a purchase.  Buyers are cautioned to make their own determinations regarding supplier responsibility, including but not limited to assessing whether the supplier has appropriate financial, organization and operational capacity, appropriate legal authority to do business in Georgia, a satisfactory record of integrity, and an acceptable performance record on past contracts.";
 strVar += "        <\/div>";
 strVar += "";
@@ -1076,7 +1149,7 @@ strVar += "          <div>";
 strVar += "";
 strVar += "            <div style=\"margin-bottom:14px\">";
 strVar += "              <b style=\"font-size:16px\">About<\/b><br>";
-strVar += "              <a href=\"https:\/\/modelearth.github.io\/io\/charts\">Embeddable  charts<\/a> - ";
+strVar += "              <a href=\"https:\/\/model.earth\/io\/charts\">Embeddable  charts<\/a> - ";
 strVar += "              <a href=\".\/?show=pickup&design=1\">Design Ideas<\/a> - ";
 strVar += "              <a href=\".\/?show=suppliers\">C19 Logistics<\/a>";
 strVar += "            <\/div>";
@@ -1190,7 +1263,6 @@ strVar += "<!-- End HTML -->";
 
 
 
-
 // Hidden until search-filters.css loads
 document.write("<div id=\"filterEmbedHolder\" style=\"display:none;position:relative\">" + strVar + "<\/div> ");
 
@@ -1199,6 +1271,7 @@ document.write("<div id=\"filterEmbedHolder\" style=\"display:none;position:rela
 // COMMON
 function loadScript(url, callback)
 {
+	url = url.replace(/^.*\/\/[^\/]+/, ''); // Allows id's to always omit the domain.
 	if (!document.getElementById(url)) { // Prevents multiple loads.
 		var script = document.createElement('script');
 	    script.type = 'text/javascript';
@@ -1307,6 +1380,36 @@ function mix(incoming, target) { // Combine two objects, priority to incoming. D
 
 // UNIQUE TO PAGE
 function jsLoaded(root) {
+	loadScript(root + '/localsite/js/localsite.js', function(results) {
+
+	  	var strVarCss = "<style>";
+		if (param["show"] == "suppliers") {
+
+			console.log("location.host: " + location.host);
+			//if(location.host.indexOf('georgia.org') >= 0) { 
+			if (location.host == 'georgia.org' || location.host == 'www.georgia.org') {
+	 			//$('.headerOffsetOne').css('height', '75px'); // Instead of 100px, for space above title.
+
+	 			strVarCss += ".headerOffsetOne {height:75px}"; 
+	 		}
+			strVarCss += "h1 {font-size:38px;margin-top:20px}"; // Larger header for Drupal
+			//strVarCss += ".headerOffsetOne{display:none !important}";
+			strVarCss += ".component--main_content{margin-top:70px}";
+
+			// Limit where this occurs
+			strVarCss += "p {margin: 0 0 2.2rem;}"; // Overrides Drupal 3.4rem bottom
+		}
+		strVarCss += "<\/style>";
+		//document.write(strVarCss);
+		document.head.insertAdjacentHTML("beforeend", strVarCss);
+
+	  	loadScript(root + '/localsite/js/d3.v5.min.js', function(results) { // BUG - change so map-filters.js does not require this on it's load
+	    	loadScript(root + '/localsite/js/map.js', function(results) { 
+	  			loadSearchFilters(root,1); // Uses dual_map library in localsite.js for community_data_root
+	  		});
+	    });
+	});
+
 	loadScript(root + '/localsite/js/table-sort.js', function(results) {});
 	if (location.host.indexOf('localhost') >= 0) {
 		// Causing map points to shift right, maybe due to later loading.
@@ -1335,68 +1438,47 @@ function leafletLoaded(root, count) {
 	} else {
 		console.log("ERROR: leafletLoaded exceeded 100 attempts.");
 	}
-	$("#pageLinks").append($("#pageLinksInsert"));
-	$("#pageLinksInsert").show();
+	// To do: make part of an optional widget
+	//$(document).ready(function () {
+	//	$("#pageLinks").append($("#pageLinksInsert"));
+	//	$("#pageLinksInsert").show();
+	//});
 }
-function d3Loaded(root) {
-	// To big and d3-legend.js file is not available in embed, despite 
-	//loadScript(root + '/localsite/js/d3-legend.js');
-}
+
+function loadSearchFilters(root, count) {
+	if (typeof customD3loaded !== 'undefined' && typeof localsite_map !== 'undefined') {
+		loadScript(root + '/localsite/js/map-filters.js', function(results) {});
+	} else if (count<100) { // Wait a milisecond and try again
+		setTimeout( function() {
+   			console.log("try loadSearchFilters again")
+			loadSearchFilters(root,count+1);
+   		}, 10 );
+	} else {
+		console.log("ERROR: loadSearchFilters exceeded 100 attempts.");
+	}
+
+} 
 
 function lazyLoadFiles() {
 	let root = location.protocol + '//' + location.host;
 	if (location.host.indexOf('localhost') < 0) {
 		root = "https://neighborhood.org";
 	}
-  loadScript(root + '/localsite/js/jquery/jquery-1.12.4.min.js', function(results) {
-    jsLoaded(root);
-  });
+	loadScript(root + '/localsite/js/jquery/jquery-1.12.4.min.js', function(results) {
+		jsLoaded(root);
+	});
 
-  // Load early so available later
-  loadScript(root + '/localsite/js/d3.v5.min.js', function(results) { // BUG - change so dual-map does not require this on it's load
-  	loadScript(root + '/localsite/js/map.js', function(results) {});
-  });
-  loadScript(root + '/localsite/js/localsite.js', function(results) {
+	// Load early so available later
+	loadScript(root + '/localsite/js/d3.v5.min.js', function(results) { // BUG - change so dual-map does not require this on it's load
+		loadScript(root + '/localsite/js/map.js', function(results) {});
+	});
 
-  	var strVarCss = "<style>";
-	if (param["show"] == "suppliers") {
-
-		console.log("location.host: " + location.host);
-		//if(location.host.indexOf('georgia.org') >= 0) { 
- 			//$('.headerOffsetOne').css('height', '75px'); // Instead of 100px, for space above title.
- 			strVarCss += ".headerOffsetOne {height:75px}"; 
- 		//}
-		strVarCss += "h1 {font-size:38px;margin-top:20px}"; // Larger header for Drupal
-		//strVarCss += ".headerOffsetOne{display:none !important}";
-		strVarCss += ".component--main_content{margin-top:70px}";
-
-		// Limit where this occurs
-		strVarCss += "p {margin: 0 0 2.2rem;}"; // Overrides Drupal 3.4rem bottom
-	}
-	strVarCss += "<\/style>";
-	//document.write(strVarCss);
-	document.head.insertAdjacentHTML("beforeend", strVarCss);
-
-  	loadScript(root + '/localsite/js/d3.v5.min.js', function(results) { // BUG - change so map-filters.js does not require this on it's load
-    	loadScript(root + '/localsite/js/map.js', function(results) { 
-  			loadSearchFilters(1); // Uses dual_map library for community_root
-  		});
-    });	
-  });
-
-	function loadSearchFilters(count) {
-		if (typeof customD3loaded !== 'undefined' && typeof dual_map !== 'undefined') {
-			loadScript(root + '/localsite/js/map-filters.js', function(results) {});
-		} else if (count<100) { // Wait a milisecond and try again
-			setTimeout( function() {
-	   			console.log("try loadSearchFilters again")
-				loadSearchFilters(count+1);
-	   		}, 10 );
-		} else {
-			console.log("ERROR: loadSearchFilters exceeded 100 attempts.");
-		}
-
-	}  	
+	includeCSS(root + '/localsite/css/leaflet.css',root);
+	// Resides AFTER css/leaflet.css
+	loadScript(root + '/localsite/js/leaflet.js', function(results) {
+		leafletLoaded(root,1);
+	});
+ 	
 	//includeCSS(root + '/localsite/css/localsite.css',root);
 	includeCSS(root + '/localsite/css/base.css',root);
 	includeCSS(root + '/localsite/css/search-filters.css',root);
@@ -1404,31 +1486,17 @@ function lazyLoadFiles() {
 	//includeCSS(root + '/localsite/css/hexagons.css',root);
 
 
-	includeCSS(root + '/localsite/css/leaflet.css',root);
+	
 	includeCSS('https://fonts.googleapis.com/icon?family=Material+Icons',root);
 	includeCSS(root + '/localsite/css/leaflet.icon-material.css',root);
 	includeCSS(root + '/localsite/css/map.css',root);
-	
-
-	// Required by leafletLoaded that follows
-	loadScript(root + '/localsite/js/d3.v5.min.js', function(results) {
-    	d3Loaded(root);
-	});
-
-	// Resides AFTER css/leaflet.css
-	loadScript(root + '/localsite/js/leaflet.js', function(results) {
-		leafletLoaded(root,1);
-	});
-
-	
-
 }
 
 lazyLoadFiles();
 
 function dualmapLoaded(param, root, count) {
-	if (typeof dual_map !== 'undefined' && typeof L.IconMaterial !== 'undefined') {
-		dual_map.init(["somevalue", 1, "controlId"]); // Used by link to feedback form
+	if (typeof localsite_map !== 'undefined' && typeof L.IconMaterial !== 'undefined') {
+		localsite_map.init(["somevalue", 1, "controlId"]); // Used by link to feedback form
 
 		$("#filterEmbedHolder img[src]").each(function() {
 			  if($(this).attr("src").toLowerCase().indexOf("http") < 0){
@@ -1444,6 +1512,7 @@ function dualmapLoaded(param, root, count) {
 				console.log("embed-map.js detects hashChangeEvent");
 				loadMap1();
 			}, false);
+			
 		});
 	} else if (count<100) { // Wait a 100th of a second and try again
 		setTimeout( function() {
@@ -1454,17 +1523,6 @@ function dualmapLoaded(param, root, count) {
 		console.log("ERROR: dualmapLoaded exceeded 100 attempts.");
 	}
 }
-
-
-/*
-loadFromCSV('map1', 'map2', "/localsite/tools/map.csv", function(results) {
-    // This function gets called by the geocode function on success
-    //makeMap(results[0].geometry.location.lat(), results[0].geometry.location.lng());
-
-    layerControl['map2'].addOverlay(baselayers["Rail"], "Railroads"); // Appends to existing layers      
-});
-*/
-
 
 
 

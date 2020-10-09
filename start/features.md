@@ -1,10 +1,12 @@
-## Javascript Features
+## Cross-site Integration
 
-**param** - An object containing key-values from the current URL hash, parameters in the URL, and parameters set on the javascript include file.  
+JavaScript methods for sharing functionality between widgets  
 
-**hashChangeEvent** - multiple independent widgets are updated when the URL hash is changed both programmatically and by the user.    
+**hashChangeEvent** - triggers independent widgets when the URL hash is changed both programmatically and by the user.    
 
-**lazy** - A class for loading images just before they scroll into view.  
+**param** - An object containing key-values from three sources: the current URL hash, parameters in the URL, and parameters set on the javascript include&nbsp;file.  
 
-**loadMarkdown** - Loads readme files and converts links and image tags based on folder levels.  
+**loadMarkdown** - Pulls readme files into html and converts links and image tags based on folder levels.  
+
+**lazy class** - It's good to be lazy. This class waits to load images until just before they scroll into view.  
 

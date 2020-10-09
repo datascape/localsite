@@ -3,14 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="icon" type="image/x-icon" href="../img/logo/favicon.png" />
+<link rel="icon" type="image/x-icon" href="../img/logo/neighborhood-icon.png" />
 
 <!--
-  To create a widget from this page, see map-embed.js.
+  To create a widget from this page, see steps in map-embed.js.
 -->
 
-<title>Local Input-Output Map</title>
-
+<title>Community Map</title>
 
 <link type="text/css" rel="stylesheet" href="../css/base.css" />
 <link rel="stylesheet" href="../css/search-filters.css" />
@@ -27,8 +26,10 @@
 <link rel="stylesheet" href="../css/leaflet.css" />
  <!-- Resides AFTER Leaflet's CSS -->
 <script src="../js/leaflet.js"></script>
-
 <script src="../js/d3.v5.min.js"></script>
+
+<!-- Resides in info/index.html and map/index.html -->
+<script src="https://unpkg.com/topojson-client@3"></script>
 
 <!-- after d3 -->
 <script type="text/javascript" src="../js/map-filters.js"></script>
@@ -47,7 +48,7 @@
 <!-- For Facebook -->
 <meta property="og:title" content="Community Map Resources" />
 <meta property="og:type" content="article" />
-<meta property="og:image" content="https://data.georgia.org/img/logo/georgia_link_share_center.png" />
+<meta property="og:image" content="https://georgiadata.github.io/img/logo/georgia_link_share_center.png" />
 <!-- To do: populate with the current page and path
 <meta property="og:url" content="" />
 -->
@@ -57,7 +58,7 @@
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Community Map Resources" />
 <meta name="twitter:description" content="Input-Output Modeling" />
-<meta name="twitter:image" content="https://data.georgia.org/img/logo/georgia_link_share_center.png" />
+<meta name="twitter:image" content="https://georgiadata.github.io/img/logo/georgia_link_share_center.png" />
 
 </head>
 
@@ -78,7 +79,7 @@
   if (param["intro"] || param["show"] == "farmfresh") {
     //document.getElementById("readmeHolder").style.display = "block";
     //document.getElementById("readmeEdit").style.display = "block";
-    loadMarkdown("../map/starter/README.md", "introDiv", "_parent");
+    //loadMarkdown("../map/starter/README.md", "introDiv", "_parent");
   }
   if (param["design"] && param["show"] != "farmfresh") {
     document.getElementById("readmeHolder").style.display = "block";
@@ -96,15 +97,8 @@
 
 <!-- Start HTML -->
 
-<style>
-  svg{ max-width:none; } /* Fix for embedding material icon map points in Drupal */
-</style>
-
 <!-- FILTERS -->
-<!--
-  Sample indicator:weight hash value: #census=pop>180:25;edu:50;work:50;pov>15;ypov>10;apov>8;spov>4
-  https://datascape.github.io/community/#columns=population:31;education:50
--->
+<div class="search-filters-css" style="display:none">
 <div id="headerFixed" class="filterPanel">
   <div class="headerOffset headerOffsetOne">&nbsp;</div>
 
@@ -114,10 +108,44 @@
   <div id="activeLayer" style="display: none"></div>
 
  
-  <div id="filterFieldsHolder" style="padding-top:0px; margin-left:30px">
+  <div id="filterFieldsHolder" class="contentfull noprint" style="margin:0 auto; padding-top:0px; overflow:auto">
     <div class="filterFields" style="min-height:54px; padding:2px 0 4px 0; float:left">
 
-      <div style="display:none;" class="filterField mock-up suppliers exporter">
+      <div id="showApps" class="local" style="display:none;float:left;">
+        <i class="material-icons">&#xE5C3;</i>
+      </div>
+
+      <div style="display:none;" class="filterField layerclass local">
+        <div id="catSearchHolder">
+          <div class="filterLabel">
+            <div class="filterLabelMain">
+            Layers
+            </div>
+          </div>
+
+
+            <div style="position:relative; float:left;">
+
+                <div class="select-menu-arrow-holder">
+                  <i class="material-icons" style="font-size:24px;cursor:pointer;display:none;">&#xE409;</i>
+                  <i class="material-icons" style="font-size:24px;cursor:pointer;">&#xE313;</i>
+                </div>
+                <!--
+                <select id="selectProduct" class="selectMenu" style="float:left">
+                    <option value="1">HS Code(s)</option>
+                </select>
+                -->
+
+                <!--
+                onkeyup="return SearchCategories(event);"
+                readonly - prevents keyboard covering choices on mobile
+                -->
+                <input readonly id="appMenu" class="filterClick mobileWide textInput" placeholder="Layers" type="text" autocomplete="off" style="width: 200px; margin-top: 0px;" />
+            </div>
+        </div>
+      </div>
+
+      <div style="display:none;" class="filterField layerclass mock-up suppliers exporter">
         <div id="catSearchHolder">
           <div class="filterLabel">
             <div class="filterLabelMain">
@@ -128,9 +156,9 @@
 
             <div style="position:relative; float:left;">
 
-                <div style="position:absolute; right:5px; top:5px; pointer-events:none;">
-                  <i class="material-icons" style="font-size:24px;cursor:pointer;">&#xE409;</i>
-                  <i class="material-icons" style="font-size:24px;cursor:pointer;display:none;">&#xE313;</i>
+                <div class="select-menu-arrow-holder">
+                  <i class="material-icons" style="font-size:24px;cursor:pointer;display:none;">&#xE409;</i>
+                  <i class="material-icons" style="font-size:24px;cursor:pointer;">&#xE313;</i>
                 </div>
                 <!--
                 <select id="selectProduct" class="selectMenu" style="float:left">
@@ -150,6 +178,8 @@
       <!-- KEYWORD SEARCH -->
       <div style="float:left">
         <div class="filterField keywordField">
+          
+
           <!-- Search Companies -->
           <div class="filterLabel">
               <div class="filterLabelMain">
@@ -214,7 +244,7 @@
       <div style="float:left;">
 
 
-            <div style="overflow: visible;display:none" class="local filterField searchElements mock-up">
+            <div style="overflow:visible; display:none" class="filterField searchElements mock-up earth">
                 <div class="filterLabel">
                   <div class="filterLabelMain">
                     Where
@@ -256,7 +286,7 @@
                     </div>
                     -->
 
-                    <div class="filterBubble" style="pointer-events: auto;"><!-- Catch click through -->
+                    <div id="" class="filterBubble" style="pointer-events: auto;"><!-- Catch click through -->
                         <div class="hideAdvanced" style="float:right;cursor:pointer">&#10005;</div>
 
                         <input id="l" autocomplete="off" style="width:100%;max-width:400px;padding-right:27px;margin-bottom:10px" class="filterClick mobileWide textInput si-input" type="text" value="" onkeyup="return SearchEnter(event);" />
@@ -280,25 +310,90 @@
                           </ul>
                           <div style="overflow:auto; border:1px solid #ccc; padding:20px;" class="geoListHolder height100">
                               <div class="geoListIntro">
+
+                                <div class="local input-output" style="display:none">
+                                <select id="state_select" name="state">
+                                   <option value='AL'>Alabama</option>
+                                   <option value='AK'>Alaska</option>
+                                   <option value='AZ'>Arizona</option>
+                                   <option value='AR'>Arkansas</option>
+                                   <option value='CA'>California</option>
+                                   <option value='CO'>Colorado</option>
+                                   <option value='CT'>Connecticut</option>
+                                   <option value='DE'>Delaware</option>
+                                   <option value='DC'>District of Columbia</option>
+                                   <option value='FL'>Florida</option>
+                                   <option value='GA' selected>Georgia</option>
+                                   <option value='HI'>Hawaii</option>
+                                   <option value='ID'>Idaho</option>
+                                   <option value='IL'>Illinois</option>
+                                   <option value='IN'>Indiana</option>
+                                   <option value='IA'>Iowa</option>
+                                   <option value='KS'>Kansas</option>
+                                   <option value='KY'>Kentucky</option>
+                                   <option value='LA'>Louisiana</option>
+                                   <option value='ME'>Maine</option>
+                                   <option value='MD'>Maryland</option>
+                                   <option value='MA'>Massachusetts</option>
+                                   <option value='MI'>Michigan</option>
+                                   <option value='MN'>Minnesota</option>
+                                   <option value='MS'>Mississippi</option>
+                                   <option value='MO'>Missouri</option>
+                                   <option value='MT'>Montana</option>
+                                   <option value='NE'>Nebraska</option>
+                                   <option value='NV'>Nevada</option>
+                                   <option value='NH'>New Hampshire</option>
+                                   <option value='NJ'>New Jersey</option>
+                                   <option value='NM'>New Mexico</option>
+                                   <option value='NY'>New York</option>
+                                   <option value='NC'>North Carolina</option>
+                                   <option value='ND'>North Dakota</option>
+                                   <option value='OH'>Ohio</option>
+                                   <option value='OK'>Oklahoma</option>
+                                   <option value='OR'>Oregon</option>
+                                   <option value='PA'>Pennsylvania</option>
+                                   <option value='RI'>Rhode Island</option>
+                                   <option value='SC'>South Carolina</option>
+                                   <option value='SD'>South Dakota</option>
+                                   <option value='TN'>Tennessee</option>
+                                   <option value='TX'>Texas</option>
+                                   <option value='UT'>Utah</option>
+                                   <option value='VT'>Vermont</option>
+                                   <option value='VA'>Virginia</option>
+                                   <option value='WA'>Washington</option>
+                                   <option value='WV'>West Virginia</option>
+                                   <option value='WI'>Wisconsin</option>
+                                   <option value='WY'>Wyoming</option>
+                                 </select>
+                                 <br><br>
+                                 </div>
+                                 <div style="clear:both"></div>
+
                                 <b>Quick Links</b><br>
                                 <ul>
+                                      
+                                      <li><a onClick="goHash({
+                                      'regiontitle':'West+Central+Georgia',
+                                      'geo':'US13045,US13077,US13143,US13145,US13149,US13199,US13223,US13233,US13263,US13285,US01111,US01017', 
+                                      'lat':'33.0362',
+                                      'lon':'-85.0322'
+                                      }); $('.fieldSelector').hide(); return false;" href="#regiontitle=West+Central+Georgia&geo=US13045,US13077,US13143,US13145,US13149,US13199,US13223,US13233,US13263,US13285,US01111,US01017">West&nbsp;Central&nbsp;Georgia</a></li>
+                                      <!-- Smaller region: US13077,US13145,US13149,US13199,US13263,US13285 -->
+
+                                      <li><a onClick="goHash({
+                                      'regiontitle':'Central+Georgia',
+                                      'geo':'US13023,US13043,US13091,US13109,US13167,US13175,US13209,US13267,US13271,US13279,US13283,US13309,US13315,US13107,US13235', 
+                                      'lat':'33.0362',
+                                      'lon':'-85.0322'
+                                      }); $('.fieldSelector').hide(); return false;" href="#regiontitle=Central+Georgia&geo=US13023,US13043,US13091,US13109,US13167,US13175,US13209,US13267,US13271,US13279,US13283,US13309,US13315,US13107,US13235">Central&nbsp;Georgia</a></li>
+
                                       <li><a onClick="goHash({
                                       'regiontitle':'Southeast+Coastal+Georgia',
                                       'geo':'US13001,US13005,US13127,US13161,US13229,US13305', 
-                                      'view':'mosaic', 
-                                      'count':'10',
                                       'lat':'31.1891',
                                       'lon':'-81.4979'
-                                      }); $('.fieldSelector').hide(); return false;" href="#regiontitle=Southeast+Coastal+Georgia&geo=US13001,US13005,US13127,US13161,US13229,US13305&view=mosaic&count=10&lat=31.1891&lon=-81.4980">Southeast Coastal Georgia</a></li> 
+                                      }); $('.fieldSelector').hide(); return false;" href="#regiontitle=Southeast+Coastal+Georgia&geo=US13001,US13005,US13127,US13161,US13229,US13305&lat=31.1891&lon=-81.4980">Southeast Coastal Georgia</a></li>
 
-                                      <li><a onClick="goHash({
-                                      'regiontitle':'West+Central+Georgia',
-                                      'geo':'US13077,US13145,US13149,US13199,US13263,US13285', 
-                                      'view':'mosaic', 
-                                      'count':'10',
-                                      'lat':'33.0362',
-                                      'lon':'-85.0322'
-                                      }); $('.fieldSelector').hide(); return false;" href="#regiontitle=West+Central+Georgia&geo=US13077,US13145,US13149,US13199,US13263,US13285&view=mosaic&count=10">West&nbsp;Central&nbsp;Georgia</a></li>
                                 </ul>
                                 Click column headers to sort:<br>
                               </div>
@@ -449,6 +544,107 @@
       </div><!-- /searchField -->
 
     </div><!-- /filterFields -->
+
+
+
+    <!-- Right Links -->
+        <div style="float:right; padding-top:10px;" class="hideMobile">
+          <div class="sendfeedback pagebutton" style="float:left;">
+            <!--
+            <div style="float:left">
+              <i class="material-icons" style="font-size:16pt;padding-top:7px">&#xE2C3;</i>
+            </div>
+            -->
+            <div style="margin:10px 8px 0 6px;white-space: nowrap; float:left"> 
+            Input
+            </div>
+          </div>
+          <div class="local downloadbutton showDownload pagebutton" href="#" style="float:left; display:none">
+            <div style="float:left">
+              <i class="material-icons" style="font-size:15pt;padding-top:8px">&#xE2C4;</i>
+            </div>
+            <div class="downloadtext" style="margin:10px 5px 0 3px;white-space: nowrap; float:left"> 
+            Download
+            </div>
+          </div>
+
+        <!--
+        <div class="local addlisting pagebutton greenButton" href="#" style="float:left; display:none">
+          
+          <div class="hideMobile" style="margin:10px 5px 0 3px;white-space: nowrap; float:left"> 
+          Add Listing
+          </div>
+          <div class="showMobile" style="display:none;"><i class="material-icons" style="font-size:19pt;padding-top:4px">&#xE145;</i></div>
+
+        </div>
+        <div class="local partnertools pagebutton" href="#" style="float:left; display:none">
+          <div style="margin:10px 5px 0 3px;white-space: nowrap; float:left"> 
+          Partner Tools
+          </div>
+        </div>
+        -->
+
+        <!-- Down arrow -->
+        <div class="local catchClick hideEmbed" style="position:relative;float:left;overflow:visible;">
+
+          <div class="toggleListOptions pagebutton"><i class="material-icons toggleArrow" style="font-weight:900; font-size: 32px; padding:0px; margin:0px">&#xE5C5;</i>
+          </div>
+
+          <div class="listOptions filterBubble">
+
+            <div class="hideEmbed" style="display:none">
+
+              <div class="reduceHeader menuItem" style="display:none"><i class="material-icons" style="margin-top:-5px;">&#xE3C4;</i>Narrow Header</div>
+
+              <!-- Google Icons - search for "crop" -->
+              <div class="revealImage menuItem" style="display:none"><i class="material-icons" style="margin-top:-5px;">&#xE3C4;</i>Full Header Image</div>
+
+              <div class="hideInfo hideInfoLink menuItem"><i class="material-icons" style="margin-top:-5px">&#xE88E;</i>Hide Bar</div>
+
+              <div class="showInfo showInfoLink menuItem" style="display:none"><i class="material-icons" style="margin-top:-10px">&#xE88E;</i>Show Info</div>
+
+            </div>
+
+            
+            <div class="showImage menuItem" style="display:none"><i class="material-icons">slideshow</i>Slideshow</div>
+
+              <div class="hideMobile">
+              <div class="local menuItem refreshMap" style="display:none">
+                <i class="material-icons" style="font-weight:900; margin-top:-5px">&#xE5D5;</i> Refresh Map
+              </div>
+            </div>
+
+            <!--
+            <div class="menuItem hideList" style="display:none">
+              <i class="material-icons" style="font-size:28px;margin-top:-5px;">&#xE5CD;</i> Hide List
+            </div>
+
+            <div class="menuItem showList">
+              <i class="material-icons" style="font-size:28px;margin-top:-5px;">&#xE8EF;</i> Show List
+            </div>
+            -->
+
+            <div class="menuItem hideMap" style="display:none">
+              <i class="material-icons" style="font-size:28px;margin-top:-5px;">&#xE55B;</i> Hide Map
+            </div>
+            <div class="menuItem showMap" style="display:none">
+              <i class="material-icons" style="font-size:28px;margin-top:-5px;">&#xE55B;</i> Show Map
+            </div>
+
+            <div class="menuItem showThumbnails layerContentHide" style="display:none">
+              <i class="material-icons" style="font-size:28px;margin-top:-5px;">&#xE8F0;</i> Modules
+            </div>
+
+          </div>
+
+        </div>
+        <!-- /Down arrow -->
+
+        <div class="showInfo showInfoButton1 pagebutton" style="float: left; padding: 3px 3px 3px 4px; color:#fff; display:none;"><i class="material-icons" style="font-size:28px;">&#xE88F;</i>
+        </div>
+      </div>
+      <!-- /Right Links -->
+
   </div>
     
 
@@ -474,7 +670,7 @@
       <div style="clear:both"></div>
 
 
-      <div id="catsMobile" class="suppliers" style="display:none; margin:15px 20px 20px 0; float:left">
+      <div id="catsMobile" class="layerclass suppliers" style="display:none; margin:15px 20px 20px 0; float:left">
         <div id="catListClone" class="showMobileX" style="width:100%">
         </div>
       </div>
@@ -542,33 +738,13 @@
 
   </div>
   <!-- END CATEGORIES -->
-
-
 </div>
-<!-- END FILTERS -->
-
-
-
-<aside class="Intermodal_Ports">
-group,lat,lon,value,address,city,state,zip
-Inman Rail Yard,33.795735,-84.439278,NS,1600 Marietta Rd NW,Atlanta,GA,30318
-Savannah Yard,32.069578,-81.142174,CSX,3000 Tremont Ave,Savannah,GA,31405
-James D. Mason ICTF,32.123934,-81.150914,NS,3 North Main St,Garden City,GA,31408
-Fairburn Industry Yard,33.554907,-84.595026,CSX,6700 McLarin Rd,Fairburn,GA,30213
-Whitaker Rail Yard,33.80944,-84.655451,NS,6000 Westside Rd,Austell,GA,30106
-Chatham ICTF,32.125311,-81.151331,CSX,2 Main St,Garden City,GA,31408
-Savannah,32.10035,-81.169963,NS,1 Charlie Gay Drive,Savannah,GA,31408
-Cordele Intermodal Center,31.966779,-83.755101,Heart GA,2902 East 13th Ave.,Cordele,GA,31010
-Port of Savannah Ocean Terminal,32.093702,-81.111692,"Ro/Ro, Breakbulk",55 N Lathrop Ave,Savannah,GA,31415
-Port of Brunswick,31.125887,-81.541194,"Ro/Ro, Agri-Bulk",157 Penniman Cir,Brunswick,GA,31523
-Port of Savannah,32.125,-81.151,Container,2 Main St,Savannah,GA,31407
-Port of Brunswick Mayor's Point Terminal,31.143373,-81.494753,Breakbulk,1100 Bay Street,Brunswick,GA,31520
-Port of Columbus,32.448734,-84.984038,Liquid Bulk,800 Lumpkin Blvd,Columbus,GA,31901
-Port of Bainbridge,30.902867,-84.606259,Liquid/Dry Bulk,1321 Spring Creek Road,Bainbridge,GA,39817
-</aside>
 
 <!-- Matches filterFields and headerFixed height -->
 <div class="headerOffset2" style="height:56px">&nbsp;</div>
+</div>
+<!-- END FILTERS -->
+
 
 
 <!-- Settings Panel -->
@@ -709,7 +885,7 @@ Port of Bainbridge,30.902867,-84.606259,Liquid/Dry Bulk,1321 Spring Creek Road,B
 
   <!--
   <div><strong>Link</strong></div>
-  <input type="text" value='https://data.georgia.org/site/' style='line-height:18pt;display:block;width:100%;font-size:12pt;color:#333;background:#fff;border:1px solid #aaa;'><br>
+  <input type="text" value='https://georgiadata.github.io/site/' style='line-height:18pt;display:block;width:100%;font-size:12pt;color:#333;background:#fff;border:1px solid #aaa;'><br>
   -->
 
     <!-- Embed Directory -->
@@ -726,7 +902,7 @@ Port of Bainbridge,30.902867,-84.606259,Liquid/Dry Bulk,1321 Spring Creek Road,B
       <div style="margin-bottom:4px"><a href="widget.html#aerospace&sitelook=coi">Get HTML</a> - view source</div>
 
 
-      <input type="text" value='<script src="//data.georgia.org/site/js/embed.js?site=georgia&v=0.1"></script><div id="map"></div>' 
+      <input type="text" value='<script src="//georgiadata.github.io/site/js/embed.js?site=georgia&v=0.1"></script><div id="map"></div>' 
       style='display:none;line-height:18pt;width:100%;font-size:12pt;color:#333;background:#fff;border:1px solid #aaa;'>
     </div>
     -->
@@ -736,7 +912,7 @@ Port of Bainbridge,30.902867,-84.606259,Liquid/Dry Bulk,1321 Spring Creek Road,B
   <div class="user-5" style="display:none">
     <hr>Staff only - 
     <a href="/maps/leaflet/providers/preview/" target="basemaps">View Basemaps</a> | 
-    <a href="/community/impact/json/menu.json">View JSON</a><br>
+    <a href="/community-data/us/state/GA/ga-layers.json">View JSON</a><br>
     <div class="settingAdminNotes"></div>
   </div>
 
@@ -745,10 +921,70 @@ Port of Bainbridge,30.902867,-84.606259,Liquid/Dry Bulk,1321 Spring Creek Road,B
 
 <div style="clear:both"></div>
 
+<!-- APP MENU -->
+<!-- From map-filters.js displayBigThumbnails function -->
+<!-- Currently map-filters.js limits loading to localhost -->
+<div class="search-filters-css" style="display:none">
+<div id="honeycombPanelHolder" style="display:none;position: relative;">
+  <div class="hideApps" style="position:absolute;right:0;top:0;cursor:pointer;padding:15px 20px 15px 15px;font-size:19px;color:#ccc;z-index:1">✕</div>
+
+  <div style="overflow:auto;position:relative">
+  <a name="sections"></a>
+  <div id="honeycombPanel" style="display: block;">
+    
+    <!--
+    <div style="float:left;display:flex;justify-content:left;">
+      
+      </div>
+    -->
+
+      <div class="bigThumbMenu" style="margin:0 auto; "></div>
+
+      <div id="honeyMenuHolder" style="display:none">
+        <div id="honeycombMenu"></div>
+      </div>
+
+        <br><br>
+     
+
+  </div>
+  </div>
+</div>
+</div>
+<div style="clear:both"></div>
+<!-- /APP MENU -->
+
+
+
+<div id="pageLinksHolder" class="content contentpadding" style="display:none; padding-top:0; padding-bottom:0">
+  <br>
+    
+    <div style="float:right; padding: 12px 0px 10px 0" class="noprint hideMobile">
+      <a href="https://model.earth/io/charts/">About Widgets</a>
+    </div>
+    <!--
+      class="mainColumn mainColumn1" 
+    -->
+     <div id="pageLinksInsert" style="displayX:none; float:left; font-size: 15px; padding: 12px 30px 10px 0">
+          <a onClick="go({}); return false;"  href="./">Overview</a> | 
+          <a onClick="goHash({'go':'bioeconomy','show':''}); return false;" href="./#go=bioeconomy">Bioeconomy</a> | 
+          <span class="local" style="display:none">
+          <a onClick="go({'go':'','show':'farmfresh'}); return false;" href="./#show=farmfresh">Fresh Produce</a> | 
+          </span>
+          <a onClick="goHash({'go':'manufacturing','show':''}); return false;" href="./#go=manufacturing">Manufacturing</a> | 
+          <a onClick="goHash({'go':'parts','show':''}); return false;" href="./#go=parts">Parts Manufacturing</a> 
+          <span class="local" style="display:none"> | 
+          <a onClick="goHash({'go':'','show':'suppliers'}); return false;" href="./#show=suppliers">PPE Suppliers</a> | 
+          </span>
+          <a style="display:none" onClick="goHash({'geomap':'true'}); return false;" href="./#geomap=US13">County&nbsp;Map</a>
+          <br>
+      </div>
+</div>
+
 
 <div class="displayOnload" style="display:none;position:relative">
 <div id="map1"></div>
-<div id="legendHolder">
+<div id="legendHolder" style="">
   <div id="allLegends"></div>
 </div>
 </div>
@@ -826,7 +1062,7 @@ Port of Bainbridge,30.902867,-84.606259,Liquid/Dry Bulk,1321 Spring Creek Road,B
 </div>
 <!-- /INDUSTRIES -->
 
-<div style="display:none;margin:20px 10px 20px 17px; min-width:195px; line-height: 1.5em;" class="suppliers">
+<div style="display:none;margin:20px 10px 20px 17px; min-width:195px; line-height: 1.5em;" class="layerclass suppliers">
   <div class="catList" id="industryCatList">
     <div>All Categories</div>
     <div>Air Purifying Machines</div>
@@ -856,180 +1092,6 @@ Port of Bainbridge,30.902867,-84.606259,Liquid/Dry Bulk,1321 Spring Creek Road,B
 <div id="list_main" style="overflow:auto; background: #fff">
 
 
-<!-- buttons -->
-<style>
-        .pagebuttonHolder {
-          padding: 4px;
-          padding-top: 6px;
-          padding-bottom: 11px;
-          overflow: auto;
-          background-color:#fff;
-          width:100%;
-        }
-        .pagebutton {
-          background: #cfcfcf;
-          margin-right: 8px;
-          color:#fff;
-          border-radius: 5px;
-          padding: 0px 4px 0 6px;
-          min-height: 34px;
-          vertical-align: middle;
-          cursor: pointer;
-          /* text-transform: uppercase; */
-          font-family: 'Open Sans', 'Helvetica Neue', HelveticaNeue, calibri, arial, sans-serif;
-          font-size: 15.5px;
-          font-weight: 400;
-          line-height: 1;
-        }
-        .pagebutton:hover {
-          background-color:#aaa;
-        }
-        .listOptions {
-          display:none;
-          position:absolute;
-          left:auto;
-          right: 0;
-          top: 44px;
-          width: 164px;
-        }
-      </style>
-
-
-      <div style="padding-top:0px;padding-bottom:0px">
-        <div style="overflow: visible;">
-
-          <div class="pagebuttonHolder" style="min-height:45px; padding-left:20px">
-
-            <div class="showApps local" style="display:none;float:left;">
-              <i class="material-icons" style="font-size:30px; color:#ccc; padding:5px 0px 4px 0px; cursor:pointer">&#xE5C3;</i>
-            </div>
-
-            <h1 class="shortTitle" style="displayX:none; margin-bottom:0px; padding:4px 15px 4px 0; white-space: nowrap; float:left; font-size:28px; color:#999; margin-top;"></h1>
-
-            <div id="pageLinks"></div>
-
-            <div style="float:right;padding-top:6px">
-              <div class="sendfeedback pagebutton" style="float:left;">
-                <div style="margin:10px 5px 0 3px;white-space: nowrap; float:left"> 
-                Feedback
-                </div>
-              </div>
-              <div class="local downloadbutton showDownload pagebutton" href="#" style="float:left; display:none">
-                <div style="float:left">
-                  <i class="material-icons" style="font-size:19pt;padding-top:4px">&#xE2C4;</i>
-                </div>
-                <div class="downloadtext" style="margin:10px 5px 0 3px;white-space: nowrap; float:left"> 
-                Download
-                </div>
-            </div>
-
-            <!--
-            <div class="local addlisting pagebutton greenButton" href="#" style="float:left; display:none">
-              
-              <div class="hideMobile" style="margin:10px 5px 0 3px;white-space: nowrap; float:left"> 
-              Add Listing
-              </div>
-              <div class="showMobile" style="display:none;"><i class="material-icons" style="font-size:19pt;padding-top:4px">&#xE145;</i></div>
-
-            </div>
-            <div class="local partnertools pagebutton" href="#" style="float:left; display:none">
-              <div style="margin:10px 5px 0 3px;white-space: nowrap; float:left"> 
-              Partner Tools
-              </div>
-            </div>
-            -->
-
-            <!-- Down arrow -->
-            <div class="local catchClick hideEmbed" style="position:relative;float:left;overflow:visible;">
-
-              <div class="toggleListOptions pagebutton"><i class="material-icons toggleArrow" style="font-weight:900; font-size: 32px; padding:0px; margin:0px">&#xE5C5;</i>
-              </div>
-
-              <div class="listOptions filterBubble">
-
-                <div class="hideEmbed" style="display:none">
-
-                  <div class="reduceHeader menuItem" style="display:none"><i class="material-icons" style="margin-top:-5px;">&#xE3C4;</i>Narrow Header</div>
-
-                  <!-- Google Icons - search for "crop" -->
-                  <div class="revealImage menuItem" style="display:none"><i class="material-icons" style="margin-top:-5px;">&#xE3C4;</i>Full Header Image</div>
-
-                  <div class="hideInfo hideInfoLink menuItem"><i class="material-icons" style="margin-top:-5px">&#xE88E;</i>Hide Bar</div>
-
-                  <div class="showInfo showInfoLink menuItem" style="display:none"><i class="material-icons" style="margin-top:-10px">&#xE88E;</i>Show Info</div>
-
-                </div>
-
-                
-                <div class="showImage menuItem" style="display:none"><i class="material-icons">slideshow</i>Slideshow</div>
-
-                  <div class="hideMobile">
-                  <div class="local menuItem refreshMap" style="display:none">
-                    <i class="material-icons" style="font-weight:900; margin-top:-5px">&#xE5D5;</i> Refresh Map
-                  </div>
-                </div>
-
-                <!--
-                <div class="menuItem hideList" style="display:none">
-                  <i class="material-icons" style="font-size:28px;margin-top:-5px;">&#xE5CD;</i> Hide List
-                </div>
-
-                <div class="menuItem showList">
-                  <i class="material-icons" style="font-size:28px;margin-top:-5px;">&#xE8EF;</i> Show List
-                </div>
-                -->
-
-                <div class="menuItem hideMap" style="display:none">
-                  <i class="material-icons" style="font-size:28px;margin-top:-5px;">&#xE55B;</i> Hide Map
-                </div>
-                <div class="menuItem showMap" style="display:none">
-                  <i class="material-icons" style="font-size:28px;margin-top:-5px;">&#xE55B;</i> Show Map
-                </div>
-
-                <div class="menuItem showThumbnails layerContentHide" style="display:none">
-                  <i class="material-icons" style="font-size:28px;margin-top:-5px;">&#xE8F0;</i> Modules
-                </div>
-
-              </div>
-
-            </div>
-
-            <div class="showInfo showInfoButton1 pagebutton" style="float: left; padding: 3px 3px 3px 4px; color:#fff; display:none;"><i class="material-icons" style="font-size:28px;">&#xE88F;</i>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-      </div><!-- /content -->
-
-      <div style="clear:both; border-bottom: 1px solid #eee;">
-      </div>
-<!-- /buttons -->
-
-
-<!-- APP MENU -->
-<!-- From map-filters.js displayBigThumbnails function -->
-<!-- Currently map-filters.js limits loading to localhost -->
-<div id="honeycombPanelHolder" style="display:none; margin-top:30px; margin-bottom:50px;">
-  
-  <!--div id="honeycombPanel"-->
-  <div id="honeycombPanel" style="display: block;">
-    <a name="sections"></a>
-    
-    <div class="bigThumbMenu widthColumns" style="margin:0 auto; "></div>
-
-    <div id="honeyMenuHolder" style="display:none">
-      <div id="honeycombMenu"></div>
-    </div>
-
-      <br><br>
-      
-  </div>
-</div>
-<div style="clear:both"></div>
-<!-- /APP MENU -->
-
 
 <section class="data-section" id="data" style="overflow:auto">
 <div class="content contentpadding litePanel displayOnload" style="display:none; padding-top:0px; padding-bottom:10px; padding-right:0px">
@@ -1041,21 +1103,23 @@ Port of Bainbridge,30.902867,-84.606259,Liquid/Dry Bulk,1321 Spring Creek Road,B
         <h1 class="listTitle" style="display:none;margin-bottom:12px"></h1>
         <h2 class="listSubtitle" style="display:none"></h2>
 
-        <div style="display:none" class="suppliers">
+        <div style="display:none" class="layerclass farmfresh">
           
 
-          <div id="legendLingsHolder" class="localonly" style="display:none;margin-bottom: 20px">
+          <div id="legendLingsHolder" style="margin-bottom: 20px">
             <div class="legendLink">
               <div class="legendLinkRect" style="background:#1f78b4;"></div>
-              <div style="margin-right:16px;float:left">MANUFACTURERS</div>
+              <div style="margin-right:16px;float:left">FARMERS MARKETS</div>
             </div>
+            <!--
             <div class="legendLink">
               <div class="legendLinkRect" style="background:#b2df8a;"></div>
               <div style="margin-right:16px;float:left">DISTRIBUTORS</div>
             </div>
+            -->
             <div class="legendLink">
               <div class="legendLinkRect" style="background:#a6cee3;"></div>
-              <div style="margin-right:16px;float:left">BOTH</div>
+              <div style="margin-right:16px;float:left">ON FARM SALES</div>
             </div>
             <div style="clear:both"></div>
           </div>
@@ -1176,7 +1240,7 @@ Port of Bainbridge,30.902867,-84.606259,Liquid/Dry Bulk,1321 Spring Creek Road,B
 
         </div>
 
-        <div id="disclaimerText" class="suppliers" style="display:none;margin-right:20px;font-size: 12px;">
+        <div id="disclaimerText" class="layerclass suppliers" style="display:none;margin-right:20px;font-size: 12px;">
           <b>Disclaimer:</b>  The Georgia Department of Economic Development (GDEcD) is collecting information from Georgia companies that indicate they are producing essential medical supplies in response to the COVID-19 pandemic. GDEcD is sharing these companies’ information with Georgia’s units of local government and other potential in-state buyers of these essential medical supplies merely as a courtesy. The following product information and addresses were submitted by private companies to GDEcD, and this list does not constitute an endorsement of any particular company or product by the State or by GDEcD.  GDEcD does not make any representations or warranties as to the accuracy of this information, or as to the quality or quantity of the products offered by these companies. Buyers use this information at their own risk.  Buyers are encouraged to contact the companies directly, for product specifications, delivery options, and other information required for executing a purchase.  Buyers are cautioned to make their own determinations regarding supplier responsibility, including but not limited to assessing whether the supplier has appropriate financial, organization and operational capacity, appropriate legal authority to do business in Georgia, a satisfactory record of integrity, and an acceptable performance record on past contracts.
         </div>
 
@@ -1188,7 +1252,7 @@ Port of Bainbridge,30.902867,-84.606259,Liquid/Dry Bulk,1321 Spring Creek Road,B
 
             <div style="margin-bottom:14px">
               <b style="font-size:16px">About</b><br>
-              <a href="https://modelearth.github.io/io/charts">Embeddable  charts</a> - 
+              <a href="https://model.earth/io/charts">Embeddable  charts</a> - 
               <a href="./?show=pickup&design=1">Design Ideas</a> - 
               <a href="./?show=suppliers">C19 Logistics</a>
             </div>
@@ -1316,6 +1380,21 @@ To add and update listings, download the <a href="map.csv">map.csv</a> file and 
 'use strict'; // Optional, makes sure we are declaring variables.
 
 
+
+$(document).ready(function () {
+  //alert(param.show)
+  //if(!param.show) {
+    setTimeout( function() {
+      $("#showApps").trigger( "click" );
+      console.log(".showApps from map/index.html");
+    }, 800 );
+  //}
+
+  $("#showApps").removeClass("local");
+  $("#showApps").show();
+
+});
+
 // COMMON - also resides in embed-map.js
 function loadScript(url, callback)
 {
@@ -1344,43 +1423,22 @@ dual_map.init(["somevalue", 1, "controlId"]); // Used by link to feedback form
 //dual_map.helloWorld();
 //dual_map.community_root();
 
-
-loadMap1();
+console.log("This page replaces community/impact. Call loadMap1() in map.js but we need dp. Also below.");
+if (!param.show) {
+  param.show = "farmfresh"; // Used by loadFromCSV which is called by loadMap1
+}
+var localmap = loadMap1(dp);
 
 // Append railroads here, somehow
 //layerControl['map1'].addOverlay(baselayers["Rail"], "Railroads"); // Appends to existing layers
 //layerControl['map2'].addOverlay(baselayers["Rail"], "Railroads"); // Appends to existing layers
+//localmap.addOverlay(baselayers["Rail"], "Railroads"); // Appends to existing layers
 
 window.onhashchange = function() {
   //param = loadParam(location.search,location.hash);
   console.log("user changed hash");
   loadMap1();
 }
-
-
-// WORK IN PROGRESS
-/*
-  $("#detaillist").text(""); // Clear prior results
-  // map1 = 
-  loadFromCSV('map1','map2', dp1, basemaps1, basemaps2, function(dp) { // Called on success
-      
-      if (!overlays2["Railroads"]) {
-        overlays2["Railroads"] = dp.group; // Allows us to check if layer already added. Setting to db.group not currently user.
-        layerControl['map1'].addOverlay(baselayers["Rail"], "Railroads"); // Appends to existing layers
-      } 
-  });
-*/
-
-/*
-  // Return to top for mobile users on search.
-  if (document.body.clientWidth <= 500) {
-    window.scrollTo({
-      top: 0,
-      left: 0
-    });
-*/
-
-
 </script>
 
 </body>
